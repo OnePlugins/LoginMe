@@ -46,7 +46,7 @@ public class Functions {
         }
         if(!WelcomeFile.exists()) {
             FileWriter writer = new FileWriter(WelcomeFile);
-            writer.write("Welcome on &2[SERVER]&r server!\nEnjoy your stay, &6[PLAYER]&r");
+            writer.write("Welcome §6[PLAYER]§r on §2{CHANGEME}§r server!");
             writer.close();
         }
         if(!Database.exists()) {
