@@ -2,12 +2,14 @@ package bxn4.oneplugins.loginme;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -15,9 +17,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
@@ -42,11 +44,17 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
     String logout = "";
     String cantLogin = "";
     String minPassLengthError = "";
+    String cantUseThisCommand = "";
     String lang = "";
     int logoutTime = 0;
     int minPassLength = 0;
     boolean dontAllowCommonPasswords = true;
     boolean enableWelcomeMessage = true;
+    String welcomeMessage = "";
+    String loggedInTitle = "";
+    String loggedInSubTitle = "";
+    String joinMessage = "";
+    String disconnectMessage = "";
     private final Path path = Paths.get("").toAbsolutePath();
     private HashMap<String, String> signedInPlayers = new HashMap<>();
     private HashMap<String, String> password = new HashMap<>();
@@ -65,15 +73,36 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
 
     @Override
     public void onEnable() {
-        /*Objects.requireNonNull(getCommand("login")).setExecutor(this);
-        Objects.requireNonNull(getCommand("register")).setExecutor(this);
-        Objects.requireNonNull(getCommand("reg")).setExecutor(this);
-        Objects.requireNonNull(getCommand("loqout")).setExecutor(this);*/
         getServer().getPluginManager().registerEvents(this, this);
         if (!loginMe.exists() || !config.exists() || !welcome.exists() || !database.exists() || !joinDisconnect.exists()) {
             Functions functions = new Functions();
             try {
                 functions.CheckDir();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if(welcome.exists()) {
+            StringBuilder builder = new StringBuilder();
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(welcome), StandardCharsets.UTF_8))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    builder.append(line);
+                    builder.append(System.lineSeparator());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+             welcomeMessage = builder.toString();
+        }
+        if (welcome.exists()) {
+            Yaml yaml = new Yaml();
+            try {
+                FileReader reader = new FileReader(path + "/plugins/OnePlugins/LoginMe/joinDisconnect.yaml");
+                Map<String, Object> data = yaml.load(reader);
+                reader.close();
+                joinMessage = data.get("join").toString();
+                disconnectMessage = data.get("disconnect").toString();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -142,14 +171,17 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         passwordsDoesNotMatch = "§8[§2>>§8] §7The passwords doesn't match.";
                         weakPassword = "§8[§2>>§8] §7The password what you entered is not secure. Please use another password for your safety.";
                         shortPassword = "§8[§2>>§8] §7The password is too short. Minimum length is: " + minPassLength;
-                        loginText = "§7Welcome back!\nPlease login with the §l§a/login <password> §r§7command!§r";
+                        loginText = "§7Please login with the §l§a/login <password> §r§7command!§r";
                         loggedIn = "§8[§2>>§8] §7Successful login!";
+                        loggedInTitle = "§a Hello ";
+                        loggedInSubTitle = "§7Enjoy your stay!";
                         loginExpired = "Your login time has expired!";
                         wrongPassword = "§8[§2>>§8] §7Bad password, try again!";
                         reconnect = "§8[§2>>§8] §7Successfully reconnected! If you want to sign out instantly, please use §l§a/logout §r§7command!§r";
                         logout = "See-ya!";
                         cantLogin = "Can't join to the server, because you connected from another place. Please wait few minutes, before you try again.";
                         minPassLengthError = "§7[§5LoginMe§7] §4!! Bad config file !!§r\n§7[§5LoginMe§7] §cThe minimum password length should greater than 6!§r";
+                        cantUseThisCommand = "§8[§2>>§8] §7Please login to use this command";
                         break;
                     case "hu":
                         registerText = "§7Kérlek regisztrálj a §l§a/register <jelszó> <jelszó> §r§7paranccsal!§r";
@@ -158,14 +190,17 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         passwordsDoesNotMatch = "§8[§2>>§8] §7A jelszavak nem egyeznek.";
                         weakPassword = "§8[§2>>§8] §7Ez a jelszó nem biztonságos. Kérlek használj másik jelszót.";
                         shortPassword = "§8[§2>>§8] §7A jelszavad túl rövid. A minimális hosszúság: " + minPassLength;
-                        loginText = "§7Üdv újra!\nKérlek jelentkezz be a §l§a/login <jelszó> §r§7paranccsal!§r";
+                        loginText = "§7Kérlek jelentkezz be a §l§a/login <jelszó> §r§7paranccsal!§r";
                         loggedIn = "§8[§2>>§8] §7Sikeres bejelentkezés!";
+                        loggedInTitle = "§a Üdv ";
+                        loggedInSubTitle = "§7Érezd jól magad!";
                         loginExpired = "Lejárt a belépésre alkalmas időd!";
                         wrongPassword = "§8[§2>>§8] §7Helytelen jelszó, próbáld újra!";
                         reconnect = "§8[§2>>§8] §7Sikeresen újracsatlakoztál! Ha azonnal kiszeretnél jelentkezni, akkor használd a §l§a/logout §r§7parancsot.§r";
                         logout = "Várunk vissza!";
                         cantLogin = "Nem sikerült csatlakozni a szerverre, mert más helyről csatlakoztál. Kérlek várj pár percet mielőtt újra megpróbálsz csatlakozni.";
                         minPassLengthError = "§7[§5LoginMe§7] §4!! Helytelen konfiguracios fajl !!§r\n§7[§5LoginMe§7] §cA minimalis jelszo hosszusag nem lehet kevesbb, mint 6 karakter!§r";
+                        cantUseThisCommand = "§8[§2>>§8] §7Kérlek jelentkezz be, hogy használd a parancsot";
                         break;
                     default:
                         Bukkit.getConsoleSender().sendMessage("§7[§5LoginMe§7] §4!! Bad config file !!§r\n§7[§5LoginMe§7] §cLanguage: " + lang + " is not supported. Supported languages: en, hu§r");
@@ -175,14 +210,17 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         passwordsDoesNotMatch = "§8[§2>>§8] §7The passwords doesn't match.";
                         weakPassword = "§8[§2>>§8] §7The password what you entered is not secure. Please use another password for your safety.";
                         shortPassword = "§8[§2>>§8] §7The password is too short. Minimum length is: " + minPassLength;
-                        loginText = "§7Welcome back!\nPlease login with the §l§a/login <password> §r§7command!§r";
+                        loginText = "§7Please login with the §l§a/login <password> §r§7command!§r";
                         loggedIn = "§8[§2>>§8] §7Successful login!";
+                        loggedInTitle = "§a Hello ";
+                        loggedInSubTitle = "§7Enjoy your stay!";
                         loginExpired = "Your login time has expired!";
                         wrongPassword = "§8[§2>>§8] §7Bad password, try again!";
                         reconnect = "§8[§2>>§8] §7Successfully reconnected! If you want to sign out instantly, please use §l§a/logout §r§7command!§r";
                         logout = "See-ya!";
                         cantLogin = "Can't join to the server, because you connected from another place. Please wait few minutes, before you try again.";
                         minPassLengthError = "§7[§5LoginMe§7] §4!! Bad config file !!§r\n§7[§5LoginMe§7] §cThe minimum password length should greater than 6!§r";
+                        cantUseThisCommand = "§8[§2>>§8] §7Please login to use this command";
                         break;
                 }
                 connect();
@@ -220,6 +258,8 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                 player.sendMessage(reconnect);
             }
         } else {
+            String welcomeMessageNew = welcomeMessage.replace("[PLAYER]", playerName);
+            player.sendMessage(welcomeMessageNew);
             player.setGameMode(GameMode.ADVENTURE);
             player.addPotionEffect(SLOW);
             player.addPotionEffect(BLINDNESS);
@@ -331,6 +371,12 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                             String match = rs.getString("MATCH");
                             if (match.equals("TRUE")) {
                                 player.sendMessage(loggedIn);
+                                player.setGameMode(GameMode.SURVIVAL);
+                                player.sendTitle(loggedInTitle + playerName + "!", loggedInSubTitle, 5, 70, 10);
+                                player.playSound(player.getLocation(), "block.note_block.pling", SoundCategory.MASTER, 1.0f, 1.0f);
+                                signedInPlayers.put(playerName, player.getAddress().getAddress().toString());
+                                String joinMessageNew = joinMessage.replace("[PLAYER]", playerName);
+                                Bukkit.broadcastMessage(joinMessageNew);
                             }
                             else {
                                 player.sendMessage(wrongPassword);
@@ -401,6 +447,11 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                                             stmt.close();
                                             conn.close();
                                             player.sendMessage(registeredText);
+                                            player.sendTitle(loggedInTitle + playerName + "!", loggedInSubTitle, 5, 70, 10);
+                                            player.playSound(player.getLocation(), "block.note_block.pling", SoundCategory.MASTER, 1.0f, 1.0f);
+                                            signedInPlayers.put(playerName, player.getAddress().getAddress().toString());
+                                            String joinMessageNew = joinMessage.replace("[PLAYER]", playerName);
+                                            Bukkit.broadcastMessage(joinMessageNew);
                                         } catch (SQLException e) {
                                             throw new RuntimeException(e);
                                         }
@@ -420,5 +471,17 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
             }
         }
         return true;
+    }
+    @EventHandler
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        Player player = event.getPlayer();
+        String playerName = player.getName();
+        String command = event.getMessage();
+        if (!signedInPlayers.containsKey(playerName)) {
+            if (!command.startsWith("/login") && !command.startsWith("/logout") && !command.startsWith("/register") && !command.startsWith("/reg")) {
+                event.setCancelled(true);
+                player.sendMessage(cantUseThisCommand);
+            }
+        }
     }
 }
