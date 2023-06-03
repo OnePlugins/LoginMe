@@ -26,10 +26,7 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -65,6 +62,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
     PotionEffect BLINDNESS = new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 255);
     PotionEffect JUMP = new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 250);
     PotionEffect SLOW_DIGGING = new PotionEffect(PotionEffectType.SLOW_DIGGING, Integer.MAX_VALUE, 255);
+    PotionEffect DAMAGE_RESISTANCE = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 1);
     private ArrayList<String> weakPasswords = new ArrayList<String>();
     File loginMe = new File(path + "/plugins/OnePlugins/LoginMe");
     File config = new File(path + "/plugins/OnePlugins/LoginMe/config.yaml");
@@ -160,7 +158,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                             "hentai", "newyork", "little", "redwings", "smith", "sticky", "cocacola", "animal", "broncos", "private", "skippy", "marvin", "blondes",
                             "enjoy", "girl", "apollo", "parker", "qwert", "time", "sydney", "women", "voodoo", "magnum", "juice", "abgrtyu", "777777", "dreams",
                             "maxwell", "music", "rush2112", "russia", "scorpion", "rebecca", "tester", "mistress", "phantom", "billy", "6666", "albert", "minecraft"
-                    ));      // Source: https://github.com/danielmiessler/SecLists/blob/master/Passwords/500-worst-passwords.txt
+                    ));     // Source: https://github.com/danielmiessler/SecLists/blob/master/Passwords/500-worst-passwords.txt
                 }
                 if (minPassLength < 6) {
                     Bukkit.getConsoleSender().sendMessage(minPassLengthError);
@@ -244,6 +242,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
 
     @Override
     public void onDisable() {
+        signedInPlayers.clear();
     }
 
     @EventHandler
@@ -366,6 +365,8 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
         String playerName = player.getName();
         switch (command.getName()) {
             case "logout":
+                String disconnectMessageNew = disconnectMessage.replace("[PLAYER]", playerName);
+                Bukkit.broadcastMessage(disconnectMessageNew);
                 signedInPlayers.remove(playerName);
                 player.kickPlayer(logout);
                 break;
@@ -385,6 +386,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                     }
                     String passwd = sb.toString();
                     hash = md.digest(playerName.getBytes());
+                    player.sendMessage(hash.toString());
                     sb = new StringBuilder();
                     for (byte b : hash) {
                         sb.append(String.format("%02x", b));
@@ -405,6 +407,12 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                                 player.playSound(player.getLocation(), "block.note_block.pling", SoundCategory.MASTER, 1.0f, 1.0f);
                                 signedInPlayers.put(playerName, player.getAddress().getAddress().toString());
                                 String joinMessageNew = joinMessage.replace("[PLAYER]", playerName);
+                                player.removePotionEffect(SLOW.getType());
+                                player.removePotionEffect(BLINDNESS.getType());
+                                player.removePotionEffect(JUMP.getType());
+                                player.removePotionEffect(SLOW_DIGGING.getType());
+                                player.setNoDamageTicks(200);
+                                player.addPotionEffect(DAMAGE_RESISTANCE);
                                 Bukkit.broadcastMessage(joinMessageNew);
                             }
                             else {
@@ -438,8 +446,8 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                 ResultSet rs = stmt.executeQuery(sqlCommand);
                 if (rs.next()) {
                     String exists = rs.getString("EXISTS");
-                    conn.close();
                     stmt.close();
+                    conn.close();
                     if (exists.equals("FALSE")) {
                         if (!signedInPlayers.containsKey(playerName)) {
                             String passwd1 = args[0];
@@ -480,6 +488,12 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                                             player.playSound(player.getLocation(), "block.note_block.pling", SoundCategory.MASTER, 1.0f, 1.0f);
                                             signedInPlayers.put(playerName, player.getAddress().getAddress().toString());
                                             String joinMessageNew = joinMessage.replace("[PLAYER]", playerName);
+                                            player.removePotionEffect(SLOW.getType());
+                                            player.removePotionEffect(BLINDNESS.getType());
+                                            player.removePotionEffect(JUMP.getType());
+                                            player.removePotionEffect(SLOW_DIGGING.getType());
+                                            player.setNoDamageTicks(200);
+                                            player.addPotionEffect(DAMAGE_RESISTANCE);
                                             Bukkit.broadcastMessage(joinMessageNew);
                                         } catch (SQLException e) {
                                             throw new RuntimeException(e);
