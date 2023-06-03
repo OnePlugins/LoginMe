@@ -1,7 +1,7 @@
 <h1>
 LoginMe
 </h1>
-<center><img src="https://github.com/OnePlugins/LoginMe/assets/78733248/59edfa69-edca-4193-954d-61cb7c56e450" width="300px"><h3>A simple login plugin</h3></center>
+<center><img src="https://github.com/OnePlugins/LoginMe/assets/78733248/59edfa69-edca-4193-954d-61cb7c56e450" width="300px"><h4>A simple login plugin</h4></center>
 <p align="center">
   --> <a href="#description">Description</a> ·
   <a href="#features">Features</a> ·
@@ -22,9 +22,11 @@ With this plugin players can protect their accounts with password.
  - Multiple languages support.
 
 ## Commands
-- /login
-- /register , /reg
-- /logout
+| Command | Description |
+| --- | --- |
+| `/login` | Login into the server with password. |
+| `/register, /reg` | Register into the server |
+| `/logout` | Logout from the server |
 
 ## Configuration
 ```yaml
@@ -56,7 +58,8 @@ Simple welcome message, when the player join.
 | MC version: 1.19.4          |
 | Supported languages:  |
 | en, hu |
-Download the latest version: <a href="github.com/OnePlugins/LoginMe/releases/">here</a>
+
+<p>Download the latest version: <a href="https://github.com/OnePlugins/LoginMe/releases/">here</a></p>
 
 ## Support me!
 <a href="https://www.buymeacoffee.com/bence912" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee">
