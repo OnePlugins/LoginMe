@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -29,6 +30,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public final class LoginMe extends JavaPlugin implements CommandExecutor, Listener {
     String registerText = "";
     String registeredText = "";
@@ -57,7 +61,6 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
     String disconnectMessage = "";
     private final Path path = Paths.get("").toAbsolutePath();
     private HashMap<String, String> signedInPlayers = new HashMap<>();
-    private HashMap<String, String> password = new HashMap<>();
     PotionEffect SLOW = new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 255);
     PotionEffect BLINDNESS = new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 255);
     PotionEffect JUMP = new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 250);
@@ -84,7 +87,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
         }
         if(welcome.exists()) {
             StringBuilder builder = new StringBuilder();
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(welcome), StandardCharsets.UTF_8))) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(welcome), UTF_8))) {
                 String line;
                 while ((line = br.readLine()) != null) {
                     builder.append(line);
@@ -93,9 +96,9 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
             } catch (IOException e) {
                 e.printStackTrace();
             }
-             welcomeMessage = builder.toString();
+            welcomeMessage = builder.toString();
         }
-        if (welcome.exists()) {
+        if (joinDisconnect.exists()) {
             Yaml yaml = new Yaml();
             try {
                 FileReader reader = new FileReader(path + "/plugins/OnePlugins/LoginMe/joinDisconnect.yaml");
@@ -114,7 +117,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                 Map<String, Object> data = yaml.load(reader);
                 reader.close();
                 lang = data.get("lang").toString();
-                logoutTime = Integer.parseInt(data.get("logout-time").toString());
+                logoutTime = Integer.parseInt(data.get("logout-time").toString()) * 20;
                 minPassLength = Integer.parseInt(data.get("min-pass-length").toString());
                 dontAllowCommonPasswords = Boolean.parseBoolean(data.get("dont-allow-common-passwords").toString());
                 enableWelcomeMessage = Boolean.parseBoolean(data.get("enable-welcome-message").toString());
@@ -293,9 +296,11 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                             @Override
                             public void run() {
                                 i++;
-                                player.sendMessage(loginText);
-                                if (signedInPlayers.containsKey(playerName)) {
+                                if(signedInPlayers.containsKey(playerName)) {
                                     cancel();
+                                }
+                                else {
+                                    player.sendMessage(loginText);
                                 }
                                 if (i > 4 && !signedInPlayers.containsKey(playerName)) {
                                     player.kickPlayer(loginExpired);
@@ -311,9 +316,11 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                             @Override
                             public void run() {
                                 i++;
-                                player.sendMessage(registerText);
                                 if (signedInPlayers.containsKey(playerName)) {
                                     cancel();
+                                }
+                                else {
+                                    player.sendMessage(registerText);
                                 }
                                 if (i > 4 && !signedInPlayers.containsKey(playerName)) {
                                     player.kickPlayer(registerExpired);
@@ -329,6 +336,28 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        String playerName = player.getName();
+        if(signedInPlayers.containsKey(playerName)) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (Bukkit.getServer().getPlayer(playerName) == null) {
+                        signedInPlayers.remove(playerName);
+                        String disconnectMessageNew = disconnectMessage.replace("[PLAYER]", playerName);
+                        Bukkit.broadcastMessage(disconnectMessageNew);
+                        cancel();
+                    }
+                    else {
+                        cancel();
+                    }
+                }
+            }.runTaskLater(this, logoutTime);
         }
     }
 
