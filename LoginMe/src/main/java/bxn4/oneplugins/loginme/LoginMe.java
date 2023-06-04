@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -31,8 +32,11 @@ import java.util.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public final class LoginMe extends JavaPlugin implements CommandExecutor, Listener {
+    //region variables
     String registerText = "";
+    String passwordGenerated = "";
     String registeredText = "";
+    String addEmail = "";
     String registerExpired = "";
     String passwordsDoesNotMatch = "";
     String weakPassword = "";
@@ -46,6 +50,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
     String cantLogin = "";
     String minPassLengthError = "";
     String cantUseThisCommand = "";
+    String loginToUseChat = "";
     String lang = "";
     int logoutTime = 0;
     int minPassLength = 0;
@@ -71,6 +76,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
     File joinDisconnect = new File(path + "/plugins/OnePlugins/LoginMe/joinDisconnect.yaml");
     private final String databaseUrl = "jdbc:sqlite:" + path + "/plugins/OnePlugins/LoginMe/playerDatabase.db";
     Connection conn = null;
+    //endregion
 
     @Override
     public void onEnable() {
@@ -167,7 +173,9 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                 switch (lang) {
                     case "en":
                         registerText = "§7Please register with the §l§a/register <password> <password> §r§7command!§r";
+                        passwordGenerated = "§7The generated password is: [PASSWORD] \n §cDon't forget to save it!§r";
                         registeredText = "§8[§2>>§8] §7Successful registration!";
+                        addEmail = "§7Are you scared about forgetting your password? Use §l§a/addemail <email> §r§7anytime to bind an email address to your account.";
                         registerExpired = "Your register time has expired!";
                         passwordsDoesNotMatch = "§8[§2>>§8] §7The passwords doesn't match.";
                         weakPassword = "§8[§2>>§8] §7The password what you entered is not secure. Please use another password for your safety.";
@@ -183,10 +191,13 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         cantLogin = "Can't join to the server, because you connected from another place. Please wait few minutes, before you try again.";
                         minPassLengthError = "§7[§5LoginMe§7] §4!! Bad config file !!§r\n§7[§5LoginMe§7] §cThe minimum password length should greater than 6!§r";
                         cantUseThisCommand = "§8[§2>>§8] §7Please login to use this command";
+                        loginToUseChat = "§8[§4>>§8] §cPlease login to use chat!§r";
                         break;
                     case "hu":
                         registerText = "§7Kérlek regisztrálj a §l§a/register <jelszó> <jelszó> §r§7paranccsal!§r";
+                        passwordGenerated = "§7A generált jelszó: [PASSWORD] \n §cNe felejtsd el lementeni!§r";
                         registeredText = "§8[§2>>§8] §7Sikeres regisztráció!";
+                        addEmail = "§7Aggódsz, hogy elfelejted a jelszavad? Használd bármikor az §l§a/addemail <email> §r§7parancsot, hogy email címet csatolj a fiókodhoz.";
                         registerExpired = "Lejárt a regisztrációra alkalmas időd!";
                         passwordsDoesNotMatch = "§8[§2>>§8] §7A jelszavak nem egyeznek.";
                         weakPassword = "§8[§2>>§8] §7Ez a jelszó nem biztonságos. Kérlek használj másik jelszót.";
@@ -202,11 +213,22 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         cantLogin = "Nem sikerült csatlakozni a szerverre, mert más helyről csatlakoztál. Kérlek várj pár percet mielőtt újra megpróbálsz csatlakozni.";
                         minPassLengthError = "§7[§5LoginMe§7] §4!! Helytelen konfiguracios fajl !!§r\n§7[§5LoginMe§7] §cA minimalis jelszo hosszusag nem lehet kevesbb, mint 6 karakter!§r";
                         cantUseThisCommand = "§8[§2>>§8] §7Kérlek jelentkezz be, hogy használd a parancsot";
+                        loginToUseChat = "§8[§4>>§8] §cJelentkezz be, hogy használd a chatet!§r";
                         break;
+                    case "lt":
+                        // Lithuanian translate by: Mafris
+                    case "pl":
+                        // Polish translate by: ??
+                    case "de":
+                        // German translate by: ??
+                    case "tr":
+                        // Turkish translate by: ??
                     default:
                         Bukkit.getConsoleSender().sendMessage("§7[§5LoginMe§7] §4!! Bad config file !!§r\n§7[§5LoginMe§7] §cLanguage: " + lang + " is not supported. Supported languages: en, hu§r");
                         registerText = "§7Please register with the §l§a/register <password> <password> §r§7command!§r";
+                        passwordGenerated = "§7The generated password is: [PASSWORD] \n §cDon't forget to save it!§r";
                         registeredText = "§8[§2>>§8] §7Successful registration!";
+                        addEmail = "§7Are you scared about forgetting your password? Use §l§a/addemail <email> §r§7anytime to bind an email address to your account.";
                         registerExpired = "Your register time has expired!";
                         passwordsDoesNotMatch = "§8[§2>>§8] §7The passwords doesn't match.";
                         weakPassword = "§8[§2>>§8] §7The password what you entered is not secure. Please use another password for your safety.";
@@ -222,6 +244,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         cantLogin = "Can't join to the server, because you connected from another place. Please wait few minutes, before you try again.";
                         minPassLengthError = "§7[§5LoginMe§7] §4!! Bad config file !!§r\n§7[§5LoginMe§7] §cThe minimum password length should greater than 6!§r";
                         cantUseThisCommand = "§8[§2>>§8] §7Please login to use this command";
+                        loginToUseChat = "§8[§4>>§8] §cPlease login to use chat!§r";
                         break;
                 }
                 connect();
@@ -340,6 +363,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
+        event.setQuitMessage("");
         Player player = event.getPlayer();
         String playerName = player.getName();
         if(signedInPlayers.containsKey(playerName)) {
@@ -370,6 +394,22 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                 signedInPlayers.remove(playerName);
                 player.kickPlayer(logout);
                 break;
+            case "password":
+                String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?@#$%&*()_-";
+                int length = Integer.parseInt(args[0]);
+                String password = "";
+                Random random = new Random();
+                if(length < 65) {
+                    for (int i = 0; i < length; i++) {
+                        int index = random.nextInt(characters.length());
+                        char passwordChar = characters.charAt(index);
+                        password += passwordChar;
+                    }
+                    String passwordNew = passwordGenerated.replace("[PASSWORD]", password);
+                    player.sendMessage(passwordNew);
+                }
+                break;
+
             case "login":
                 if (!signedInPlayers.containsKey(playerName)) {
                     String passwd1 = args[0];
@@ -386,45 +426,45 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                     }
                     String passwd = sb.toString();
                     hash = md.digest(playerName.getBytes());
-                    player.sendMessage(hash.toString());
                     sb = new StringBuilder();
                     for (byte b : hash) {
                         sb.append(String.format("%02x", b));
                     }
                     String username = sb.toString();
-                    String sqlCommand = "SELECT uname, passwd, CASE WHEN uname = '" + username + "' AND passwd = '" + passwd + "' THEN 'TRUE' ELSE 'FALSE' END AS 'MATCH' FROM playerdata;";
+                    String sqlCommand = "SELECT MAX(CASE WHEN uname = '" + username + "' AND passwd = '" + passwd + "' THEN 'TRUE' ELSE 'FALSE' END) AS 'MATCH' FROM playerdata;";
                     try {
                         Connection conn = this.connect();
                         Statement stmt = conn.createStatement();
                         stmt.execute(sqlCommand);
+                        stmt.close();
+                        conn.close();
                         ResultSet rs = stmt.executeQuery(sqlCommand);
                         if (rs.next()) {
                             String match = rs.getString("MATCH");
                             if (match.equals("TRUE")) {
+                                String joinMessageNew = joinMessage.replace("[PLAYER]", playerName);
+                                Bukkit.broadcastMessage(joinMessageNew);
                                 player.sendMessage(loggedIn);
                                 player.setGameMode(GameMode.SURVIVAL);
                                 player.sendTitle(loggedInTitle + playerName + "!", loggedInSubTitle, 5, 70, 10);
                                 player.playSound(player.getLocation(), "block.note_block.pling", SoundCategory.MASTER, 1.0f, 1.0f);
                                 signedInPlayers.put(playerName, player.getAddress().getAddress().toString());
-                                String joinMessageNew = joinMessage.replace("[PLAYER]", playerName);
                                 player.removePotionEffect(SLOW.getType());
                                 player.removePotionEffect(BLINDNESS.getType());
                                 player.removePotionEffect(JUMP.getType());
                                 player.removePotionEffect(SLOW_DIGGING.getType());
                                 player.setNoDamageTicks(200);
                                 player.addPotionEffect(DAMAGE_RESISTANCE);
-                                Bukkit.broadcastMessage(joinMessageNew);
                             }
                             else {
                                 player.sendMessage(wrongPassword);
                             }
                         }
-                        stmt.close();
-                        conn.close();
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
                 }
+                break;
         }
         if(command.getName().equals("register") || command.getName().equals("reg")) {
             MessageDigest md = null;
@@ -456,7 +496,11 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                                 if (passwd1.equals(passwd2)) {
                                     if (weakPasswords.contains(passwd1) && dontAllowCommonPasswords) {
                                         player.sendMessage(weakPassword);
-                                    } else {
+                                    }
+                                    if(passwd1.equals(playerName)) {
+                                        player.sendMessage(weakPassword);
+                                    }
+                                    else {
                                         md = null;
                                         try {
                                             md = MessageDigest.getInstance("SHA-512");
@@ -469,12 +513,6 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                                             sb.append(String.format("%02x", b));
                                         }
                                         String passwd = sb.toString();
-                                        hash = md.digest(playerName.getBytes());
-                                        sb = new StringBuilder();
-                                        for (byte b : hash) {
-                                            sb.append(String.format("%02x", b));
-                                        }
-                                        username = sb.toString();
                                         sqlCommand = "INSERT INTO PLAYERDATA (uname, passwd) " +
                                                 "VALUES ('" + username + "', '" + passwd + "')";
                                         try {
@@ -483,18 +521,20 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                                             stmt.execute(sqlCommand);
                                             stmt.close();
                                             conn.close();
+                                            String joinMessageNew = joinMessage.replace("[PLAYER]", playerName);
+                                            Bukkit.broadcastMessage(joinMessageNew);
                                             player.sendMessage(registeredText);
+                                            player.setGameMode(GameMode.SURVIVAL);
+                                            player.sendMessage(addEmail);
                                             player.sendTitle(loggedInTitle + playerName + "!", loggedInSubTitle, 5, 70, 10);
                                             player.playSound(player.getLocation(), "block.note_block.pling", SoundCategory.MASTER, 1.0f, 1.0f);
                                             signedInPlayers.put(playerName, player.getAddress().getAddress().toString());
-                                            String joinMessageNew = joinMessage.replace("[PLAYER]", playerName);
                                             player.removePotionEffect(SLOW.getType());
                                             player.removePotionEffect(BLINDNESS.getType());
                                             player.removePotionEffect(JUMP.getType());
                                             player.removePotionEffect(SLOW_DIGGING.getType());
                                             player.setNoDamageTicks(200);
                                             player.addPotionEffect(DAMAGE_RESISTANCE);
-                                            Bukkit.broadcastMessage(joinMessageNew);
                                         } catch (SQLException e) {
                                             throw new RuntimeException(e);
                                         }
@@ -515,16 +555,29 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
         }
         return true;
     }
+
     @EventHandler
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
         String command = event.getMessage();
         if (!signedInPlayers.containsKey(playerName)) {
-            if (!command.startsWith("/login") && !command.startsWith("/logout") && !command.startsWith("/register") && !command.startsWith("/reg")) {
+            if (!command.startsWith("/login") && !command.startsWith("/logout") && !command.startsWith("/register") && !command.startsWith("/reg") && !command.startsWith("/password")) {
                 event.setCancelled(true);
                 player.sendMessage(cantUseThisCommand);
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerSendMessage(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        String playerName = player.getName();
+        if(!signedInPlayers.containsKey(playerName))
+        {
+            player.sendMessage(loginToUseChat);
+            event.setMessage("");
+            event.setCancelled(true);
         }
     }
 }
