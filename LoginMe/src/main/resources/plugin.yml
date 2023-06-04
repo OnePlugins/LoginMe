@@ -1,18 +1,27 @@
 name: LoginMe
-version: '${project.version}'
+version: '1.0'
 main: bxn4.oneplugins.loginme.LoginMe
 api-version: 1.19
 description: A simple login plugin
 author: BXn4
 commands:
   login:
-    description: Login command
+    description: Login command.
     usage: /login <password>
   register:
-    description: Register command
+    description: Register command.
     usage: /register <password> <password>
     aliases:
       - reg
   logout:
-    description: Logout from the server
+    description: Logout from the server.
     usage: /logout
+  password:
+    description: Generate a random password.
+    usage: /password <length>
+  registerplayer:
+    description: Registering a player by an admin. The allowPlayerLogin parameter allows player to login. If it set to false, then the player can login by an admin.
+    usage: /registerplayer <password> allowPlayerLogin:<true/false> unRegister:[y:<year> m:<month> d:<day> h:<hour> mn:<minute>]
+  loginplayer:
+    description: Allows to login the player by an admin.
+    usage: /loginplayer <player> <password>
