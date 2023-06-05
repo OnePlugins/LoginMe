@@ -57,7 +57,7 @@ Simple welcome message, when the player join.
 | Version: 1.0 SPIGOT                |
 | MC version: 1.19.4          |
 | Supported languages:  |
-| en, hu |
+| en, hu, lt |
 
 <p>Download the latest version: <a href="https://github.com/OnePlugins/LoginMe/releases/">here</a></p>
 
