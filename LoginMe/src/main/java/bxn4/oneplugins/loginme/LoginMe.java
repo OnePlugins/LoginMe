@@ -173,7 +173,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                 switch (lang) {
                     case "en":
                         registerText = "§7Please register with the §l§a/register <password> <password> §r§7command!§r";
-                        passwordGenerated = "§7The generated password is: [PASSWORD] \n §cDon't forget to save it!§r";
+                        passwordGenerated = "§7The generated password is: §2[PASSWORD]\n§cDon't forget to save it!§r";
                         registeredText = "§8[§2>>§8] §7Successful registration!";
                         addEmail = "§7Are you scared about forgetting your password? Use §l§a/addemail <email> §r§7anytime to bind an email address to your account.";
                         registerExpired = "Your register time has expired!";
@@ -190,12 +190,12 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         logout = "See-ya!";
                         cantLogin = "Can't join to the server, because you connected from another place. Please wait few minutes, before you try again.";
                         minPassLengthError = "§7[§5LoginMe§7] §4!! Bad config file !!§r\n§7[§5LoginMe§7] §cThe minimum password length should greater than 6!§r";
-                        cantUseThisCommand = "§8[§2>>§8] §7Please login to use this command";
+                        cantUseThisCommand = "§8[§2>>§8] §7Please login to use this command.";
                         loginToUseChat = "§8[§4>>§8] §cPlease login to use chat!§r";
                         break;
                     case "hu":
                         registerText = "§7Kérlek regisztrálj a §l§a/register <jelszó> <jelszó> §r§7paranccsal!§r";
-                        passwordGenerated = "§7A generált jelszó: [PASSWORD] \n §cNe felejtsd el lementeni!§r";
+                        passwordGenerated = "§7A generált jelszó: §2[PASSWORD]\n§cNe felejtsd el lementeni!§r";
                         registeredText = "§8[§2>>§8] §7Sikeres regisztráció!";
                         addEmail = "§7Aggódsz, hogy elfelejted a jelszavad? Használd bármikor az §l§a/addemail <email> §r§7parancsot, hogy email címet csatolj a fiókodhoz.";
                         registerExpired = "Lejárt a regisztrációra alkalmas időd!";
@@ -212,11 +212,32 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         logout = "Várunk vissza!";
                         cantLogin = "Nem sikerült csatlakozni a szerverre, mert más helyről csatlakoztál. Kérlek várj pár percet mielőtt újra megpróbálsz csatlakozni.";
                         minPassLengthError = "§7[§5LoginMe§7] §4!! Helytelen konfiguracios fajl !!§r\n§7[§5LoginMe§7] §cA minimalis jelszo hosszusag nem lehet kevesbb, mint 6 karakter!§r";
-                        cantUseThisCommand = "§8[§2>>§8] §7Kérlek jelentkezz be, hogy használd a parancsot";
+                        cantUseThisCommand = "§8[§2>>§8] §7Kérlek jelentkezz be, hogy használd a parancsot.";
                         loginToUseChat = "§8[§4>>§8] §cJelentkezz be, hogy használd a chatet!§r";
                         break;
                     case "lt":
                         // Lithuanian translate by: Mafris
+                        registerText = "§7Prađome uţsiregistruoti su §l§a/register<slaptaţodis> <slaptaţodis> §r§7komandŕ!§r";
+                        passwordGenerated = "§7Sugeneruotas slaptažodis yra: §2[PASSWORD]\n§cNepamirškite jo išsaugoti!§r";
+                        registeredText = "§8[§2>>§8] §7Registracija sëkminga!";
+                        addEmail = "§7Ar jűs bijote pamirđti savo slaptaţodá? Naudokite §l§a/addemail <email'as> §r§7betkada, kad susietumete savo email'o adresa á jűsř paskyra.";
+                        registerExpired = "Tavo registracijos laikas pasibaigë!";
+                        passwordsDoesNotMatch = "§8[§2>>§8] §7Slaptaţodţiai nesutampa.";
+                        weakPassword = "§8[§2>>§8] §7Slaptaţodis kurá jűs ávedëte nëra saugus. Prađome naudoti kitŕ slaptaţodá jűsř saugumui.";
+                        shortPassword = "§8[§2>>§8] §7Slaptaţodis yra per trumpas. Minimalus ilgis yra: " + minPassLength;
+                        loginText = "§7Prađome prisijungti su §l§a/login <slaptaţodţis> §r§7komandŕ!§r";
+                        loggedIn = "§8[§2>>§8] §7Sëkmingai prisijungëte!";
+                        loggedInTitle = "§a Sveiki ";
+                        loggedInSubTitle = "§7Gerai praleiskit laikŕ!";
+                        loginExpired = "Jűsř prisijungimo laikas pasibaigë!";
+                        wrongPassword = "§8[§2>>§8] §7Neteisingas slaptazodis, bandykite iđ naujo!";
+                        reconnect = "§8[§2>>§8] §7Sëkmingai iđ naujo prisijungëte! Jeigu norite atsijungti iđ karto, prađome naudoti §l§a/logout §r§7komandŕ!!§r";
+                        logout = "Iki kito karto!";
+                        cantLogin = "Negalite prisijungti prie serverio, nes esate prisijunge iđ kitos vietos. Prađome palaukti kelias minutës, kad galëtumete bandyti iđ naujo.";
+                        minPassLengthError = "§7[§5LoginMe§7] §4!! Blogas konfiguracijos failas !!§r\n§7[§5LoginMe§7] §cMinimalus slaptaţodţio ilgis turi bűti didesnis nei 6!§r";
+                        cantUseThisCommand = "§8[§2>>§8] §7Prađome prisijungti, kad galëtumete naudoti điŕ komandŕ.§r";
+                        loginToUseChat = "§8[§4>>§8] §cPrađome prisijungti, kad galëtume naudoti chat'ŕ!§r";
+                        break;
                     case "pl":
                         // Polish translate by: ??
                     case "de":
@@ -226,7 +247,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                     default:
                         Bukkit.getConsoleSender().sendMessage("§7[§5LoginMe§7] §4!! Bad config file !!§r\n§7[§5LoginMe§7] §cLanguage: " + lang + " is not supported. Supported languages: en, hu§r");
                         registerText = "§7Please register with the §l§a/register <password> <password> §r§7command!§r";
-                        passwordGenerated = "§7The generated password is: [PASSWORD] \n §cDon't forget to save it!§r";
+                        passwordGenerated = "§7The generated password is: §2[PASSWORD]\n§cDon't forget to save it!§r";
                         registeredText = "§8[§2>>§8] §7Successful registration!";
                         addEmail = "§7Are you scared about forgetting your password? Use §l§a/addemail <email> §r§7anytime to bind an email address to your account.";
                         registerExpired = "Your register time has expired!";
@@ -243,7 +264,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         logout = "See-ya!";
                         cantLogin = "Can't join to the server, because you connected from another place. Please wait few minutes, before you try again.";
                         minPassLengthError = "§7[§5LoginMe§7] §4!! Bad config file !!§r\n§7[§5LoginMe§7] §cThe minimum password length should greater than 6!§r";
-                        cantUseThisCommand = "§8[§2>>§8] §7Please login to use this command";
+                        cantUseThisCommand = "§8[§2>>§8] §7Please login to use this command.";
                         loginToUseChat = "§8[§4>>§8] §cPlease login to use chat!§r";
                         break;
                 }
@@ -266,6 +287,15 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
     @Override
     public void onDisable() {
         signedInPlayers.clear();
+        try {
+            Connection conn = this.connect();
+            Statement stmt = conn.createStatement();
+            conn.close();
+            stmt.close();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @EventHandler
@@ -351,10 +381,10 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                             }
                         }.runTaskTimer(this, 800, 800);
                     }
+                    rs.close();
+                    stmt.close();
+                    conn.close();
                 }
-                rs.close();
-                stmt.close();
-                conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -409,7 +439,6 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                     player.sendMessage(passwordNew);
                 }
                 break;
-
             case "login":
                 if (!signedInPlayers.containsKey(playerName)) {
                     String passwd1 = args[0];
@@ -436,8 +465,6 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         Connection conn = this.connect();
                         Statement stmt = conn.createStatement();
                         stmt.execute(sqlCommand);
-                        stmt.close();
-                        conn.close();
                         ResultSet rs = stmt.executeQuery(sqlCommand);
                         if (rs.next()) {
                             String match = rs.getString("MATCH");
@@ -459,6 +486,9 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                             else {
                                 player.sendMessage(wrongPassword);
                             }
+                            rs.close();
+                            stmt.close();
+                            conn.close();
                         }
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
@@ -519,6 +549,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                                             conn = this.connect();
                                             stmt = conn.createStatement();
                                             stmt.execute(sqlCommand);
+                                            rs.close();
                                             stmt.close();
                                             conn.close();
                                             String joinMessageNew = joinMessage.replace("[PLAYER]", playerName);
