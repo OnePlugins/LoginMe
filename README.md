@@ -23,7 +23,7 @@ With this plugin players can protect their accounts with password.
 
 ## Commands
 | Command | Description | How To Use |
-| --- | --- |
+| --- | --- | --- |
 | `/login` | Login into the server with password. | /login [password] |
 | `/register, /reg` | Register into the server | /register [password] [password] |
 | `/logout` | Logout from the server | /logout |
