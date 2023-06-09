@@ -39,9 +39,11 @@ With this plugin players can protect their accounts with password.
 | `/register, /reg` | /register [password] [password] |
 | `/logout` | /logout |
 | `/password` | /password [length] |
-| `/registerplayer` | /registerplayer <player> [password] allowPlayerLogin:<true/false> unRegister:[y:<year> m:<month> d:<day> h:<hour> mn:<minute>] |
+| `/registerplayer` | /registerplayer <player> [password] allowPlayerLogin:<true/false> [y:<year> m:<month> d:<day> h:<hour> mn:<minute>] |
 | `/loginplayer` | /loginplayer <player> [password] |
 | `/loginbackup` | /loginbackup help |
+
+Example: /registerplayer Steve steve12345 allowPlayerLogin:false y:2023 m:06 d:11 h:10 mn:00
   
 ## Configuration
 ```yaml
