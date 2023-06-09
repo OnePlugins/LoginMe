@@ -35,12 +35,12 @@ With this plugin players can protect their accounts with password.
 ## Usages
 | Command | How To Use |
 | --- | --- |
-| `/login` | /login <password> |
-| `/register, /reg` | /register <password <password> |
+| `/login` | /login [password] |
+| `/register, /reg` | /register [password] [password] |
 | `/logout` | /logout |
 | `/password` | /password <length> |
-| `/registerplayer` | /registerplayer <player> <password> allowPlayerLogin:<true/false> unRegister:[y:<year> m:<month> d:<day> h:<hour> mn:<minute>] |
-| `/loginplayer` | /loginplayer <player> <password> |
+| `/registerplayer` | /registerplayer <player> [password] allowPlayerLogin:<true/false> unRegister:[y:<year> m:<month> d:<day> h:<hour> mn:<minute>] |
+| `/loginplayer` | /loginplayer <player> [password] |
 | `/loginbackup` | /loginbackup help |
   
 ## Configuration
