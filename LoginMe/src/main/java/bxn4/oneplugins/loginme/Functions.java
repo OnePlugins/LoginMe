@@ -69,7 +69,10 @@ public class Functions {
                 "CREATE TABLE IF NOT EXISTS `PLAYERDATA` (\n" +
                 "`uname` TEXT NOT NULL,\n" +
                 "`passwd` TEXT NOT NULL,\n" +
-                "`emailad` TEXT\n" +
+                "`emailad` TEXT,\n" +
+                "`backupcode` TEXT,\n" +
+                "`emailconfirmationcode` TEXT,\n" +
+                "`passwordresetcode` TEXT\n" +
                 ");";
         try {
             Connection conn = DriverManager.getConnection(url);
