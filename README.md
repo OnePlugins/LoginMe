@@ -27,8 +27,8 @@ With this plugin players can protect their accounts with password.
 | `/login` | Login into the server with password. | /login [password] |
 | `/register, /reg` | Register into the server | /register [password] [password] |
 | `/logout` | Logout from the server | /logout |
-| `/password` | Generate a random password | /password [length] | /registerplayer <player> [password] allowPlayerLogin:<true/false> [y:<year> m:<month> d:<day> h:<hour> mn:<minute>] |
-| `/registerplayer` | Registering a player by an admin. The allowPlayerLogin parameter allows player to login. If it set to false, then the player can login by an admin. |
+| `/password` | Generate a random password | /password [length] |
+| `/registerplayer` | Registering a player by an admin. The allowPlayerLogin parameter allows player to login. If it set to false, then the player can login by an admin. | /registerplayer <player> [password] allowPlayerLogin:<true/false> [y:<year> m:<month> d:<day> h:<hour> mn:<minute>] |
 | `/loginplayer` | Allows to login the player by an admin. | /loginplayer <player> [password] |
 | `/loginbackup` | Simple code, to reset your password. | /loginbackup help |
  
