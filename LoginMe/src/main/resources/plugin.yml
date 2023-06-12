@@ -4,6 +4,7 @@ main: bxn4.oneplugins.loginme.LoginMe
 api-version: 1.19
 description: A simple login plugin
 author: BXn4
+website: https://github.com/OnePlugins/LoginMe
 commands:
   login:
     description: Login command.
@@ -26,5 +27,20 @@ commands:
     description: Allows to login the player by an admin.
     usage: /loginplayer <player> <password>
   loginbackup:
-    description: Simple code, to reset your password.
-    usage: /loginbackup
+    description: Simple backup code, to reset your password.
+    usage:
+    - /loginbackup create
+    - /loginbackup code <code>
+    - /loginbackup setpass <newpassword>
+  loginbackup create:
+    description: Creating a 8 digits backup code.
+    usage: /loginbackup create
+  loginbackup code:
+    description: For use your backup code.
+    usage: /loginbackup code <code>
+  loginbackup setpass:
+      description: Changing the password.
+      usage: /loginbackup setpass <newpassword>
+  changepass:
+    description: Changing your password.
+    usage: /changepass <oldpassword> <newpassword>
