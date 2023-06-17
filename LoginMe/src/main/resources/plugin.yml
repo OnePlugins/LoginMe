@@ -21,11 +21,12 @@ commands:
     description: Generate a random password.
     usage: /password <length>
   registerplayer:
-    description: Registering a player by an admin. The allowPlayerLogin parameter allows player to login. If it set to false, then the player can login by an admin.
-    usage: /registerplayer <player> <password> allowPlayerLogin:<true/false> [y:<year> m:<month> d:<day> h:<hour> mn:<minute>]
-  loginplayer:
-    description: Allows to login the player by an admin.
-    usage: /loginplayer <player> <password>
+    description: Registering a player by an admin.
+    usage: /registerplayer <player> <password>
+      - regplayer
+  setpass:
+    description: Change password of a player.
+    usage: /setpass <player> <password>
   loginbackup:
     description: Simple backup code, to reset your password.
     usage:
