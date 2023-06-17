@@ -41,6 +41,8 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
     String passwordUpdated = "";
     String codeDeleted = "";
     String registeredText = "";
+    String registeredBy = "";
+    String registeredPlayer = "";
     String addEmail = "";
     String updateEmail = "";
     String registerExpired = "";
@@ -190,6 +192,8 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         passwordUpdated = "Password updated! Now you can login with the new password.";
                         codeDeleted = " Please create a new code because the previous one has been deleted.";
                         registeredText = "§8[§2>>§8] §7Successful registration!";
+                        registeredPlayer = "§8[§2>>§8] §7Registered player: §a ";
+                        registeredBy ="§8[§2>>§8] §7You were registered by §2[NAME]§7, and your password is: §2[PASSWORD]§7. Change your password anytime with the: §l§a/changepass <oldpassword> <newpassword> §7command!";
                         addEmail = "§7Are you scared about forgetting your password? Use §l§a/loginbackup email <email> §r§7anytime to bind an email address to your account, or use §l§a/loginbackup create §r§7anytime to create a backup code.";
                         updateEmail = "§7You already have connected an email address. Use §l§a/loginbackup newmail <email> §r§7anytime to bind an email address to your account, or use §l§a/loginbackup create §r§7anytime to create a backup code.";
                         registerExpired = "Your register time has expired!";
@@ -213,13 +217,15 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         registerText = "§7Kérlek regisztrálj a §l§a/register <jelszó> <jelszó> §r§7paranccsal!§r";
                         passwordGenerated = "§8[§2>>§8] §7A generált jelszó: §2[PASSWORD]\n§cNe felejtsd el lementeni!§r";
                         passwordGenerateUsage = "§7Használat: §l§a/password <hosszúság>§r§7 (max 32)";
-                        backupCodeCreated = "§8[§2>>§8] §7A visszaállító kódod: §2[BACKUP]\n§cNe felejtsd el lementeni! §7Az elérhető parancsokért használd a: §l§a/help loginbackup §r§7parancsot.;§r";
+                        backupCodeCreated = "§8[§2>>§8] §7A visszaállító kódod: §2[BACKUP]\n§cNe felejtsd el lementeni! §7Az elérhető parancsokért használd a: §l§a/help loginbackup §r§7parancsot.§r";
                         backupCodeWarning = "§8[§4!!§8] §7A kód §clátható lesz! §7Kérlek írd be újra a parancsot, hogy látható legyen kódod.";
                         backupCodeUse = "§8[§2>>§8] §7Kód felhasználva! Az új jelszó beállításához használd a: §l§a/loginbackup setpass <jelszó> §r§7parancsot.";
                         backupCodeWrong = "Helytelen kód!";
                         passwordUpdated = "A jelszó frissült! Mostmár beléphetsz az új jelszóval.";
                         codeDeleted = " Kérlek hozz létre új kódot, mert az előző törlése került.";
                         registeredText = "§8[§2>>§8] §7Sikeres regisztráció!";
+                        registeredPlayer = "§8[§2>>§8] §7Regisztrált játékos: §a ";
+                        registeredBy ="§8[§2>>§8] §7Regisztrálva lettél §2[NAME]§7 által, és a jelszód: §2[PASSWORD]§7. Bármikor módosíthatod a jelszavad a: §l§a/changepass <régijelszó> <jelszó> §7paranccsal!";
                         addEmail = "§7Aggódsz, hogy elfelejted a jelszavad? Használd bármikor az §l§a/loginbackup email <email> §r§7parancsot, hogy email címet csatolj a fiókodhoz, vagy használd a §l§a/loginbackup create §r§7parancsot, hogy visszaállító kódot hozz létre.";
                         registerExpired = "Lejárt a regisztrációra alkalmas időd!";
                         passwordsDoesNotMatch = "§8[§2>>§8] §7A jelszavak nem egyeznek.";
@@ -273,7 +279,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         Bukkit.getConsoleSender().sendMessage("§7[§5LoginMe§7] §4!! Bad config file !!§r\n§7[§5LoginMe§7] §cLanguage: " + lang + " is not supported. Supported languages: en, hu, lt§r");
                         registerText = "§7Please register with the §l§a/register <password> <password> §r§7command!§r";
                         passwordGenerated = "§8[§2>>§8] §7The generated password is: §2[PASSWORD]\n§cDon't forget to save it!§r";
-                        passwordGenerateUsage = "§7To use this command type: §l§a/password <length>§r§7 (max 32)";
+                        passwordGenerateUsage = "§7Usage: §l§a/password <length>§r§7 (max 32)";
                         backupCodeCreated = "§8[§2>>§8] §7Your backup code is: §2[BACKUP]\n§cDon't forget to save it! §7Type: §l§a/help loginbackup §r§7to see the avaliable commands.§r";
                         backupCodeWarning = "§8[§4!!§8] §7Your code §cwill be visible! §7Please type the command again to show your code.";
                         backupCodeUse = "§8[§2>>§8] §7Code used! Type: §l§a/loginbackup setpass <password> §r§7to set your password.";
@@ -281,7 +287,10 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         passwordUpdated = "Password updated! Now you can login with the new password.";
                         codeDeleted = " Please create a new code because the previous one has been deleted.";
                         registeredText = "§8[§2>>§8] §7Successful registration!";
+                        registeredPlayer = "§8[§2>>§8] §7Registered player: §a ";
+                        registeredBy ="§8[§2>>§8] §7You were registered by §2[NAME]§7, and your password is: §2[PASSWORD]§7. Change your password anytime with the: §l§a/changepass <oldpassword> <newpassword> §7command!";
                         addEmail = "§7Are you scared about forgetting your password? Use §l§a/loginbackup email <email> §r§7anytime to bind an email address to your account, or use §l§a/loginbackup create §r§7anytime to create a backup code.";
+                        updateEmail = "§7You already have connected an email address. Use §l§a/loginbackup newmail <email> §r§7anytime to bind an email address to your account, or use §l§a/loginbackup create §r§7anytime to create a backup code.";
                         registerExpired = "Your register time has expired!";
                         passwordsDoesNotMatch = "§8[§2>>§8] §7The passwords doesn't match.";
                         weakPassword = "§8[§2>>§8] §7The password what you entered is not secure. Please use another password for your safety.";
@@ -455,10 +464,9 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                 player.kickPlayer(logout);
                 break;
             case "password":
-                if(args[0].equals("")) {
+                if (args[0].equals("")) {
                     player.sendMessage(passwordGenerateUsage);
-                }
-                else {
+                } else {
                     try {
                         if (args.length != 0) {
                             int length = Integer.parseInt(args[0]);
@@ -473,18 +481,16 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                                 String passwordNew = passwordGenerated.replace("[PASSWORD]", password);
                                 player.sendMessage(passwordNew);
                             }
-                        }
-                        else {
+                        } else {
                             player.sendMessage(passwordGenerateUsage);
                         }
-                    }
-                    catch (NumberFormatException e) {
+                    } catch (NumberFormatException e) {
                         player.sendMessage(passwordGenerateUsage);
                     }
                 }
                 break;
             case "changepass":
-                if(signedInPlayers.containsKey(playerName)) {
+                if (signedInPlayers.containsKey(playerName)) {
                     String passwd1 = args[0];
                     MessageDigest md = null;
                     try {
@@ -540,27 +546,25 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                                             conn.close();
                                         } catch (SQLException e) {
                                         }
+                                        signedInPlayers.remove(playerName);
                                         player.kickPlayer(passwordUpdated);
                                     }
-                                }
-                                else {
+                                } else {
                                     player.sendMessage(shortPassword);
                                 }
-                            }
-                            else {
+                            } else {
                                 player.sendMessage(wrongPassword);
                             }
                         }
-                    }
-                    catch (SQLException e) {
+                    } catch (SQLException e) {
 
                     }
                 }
                 break;
             case "loginbackup":
-                if(args[0].equals("create")) {
+                if (args[0].equals("create")) {
                     if (signedInPlayers.containsKey(playerName)) {
-                        if(backupCodeCommand.containsKey(playerName) && backupCodeCommand.containsValue(1)) {
+                        if (backupCodeCommand.containsKey(playerName) && backupCodeCommand.containsValue(1)) {
                             MessageDigest md = null;
                             try {
                                 md = MessageDigest.getInstance("SHA-512");
@@ -600,11 +604,9 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                                 stmt.execute(sqlCommand);
                                 stmt.close();
                                 conn.close();
+                            } catch (SQLException e) {
                             }
-                            catch (SQLException e) {
-                            }
-                        }
-                        else {
+                        } else {
                             if (!backupCodeCommand.containsKey(playerName)) {
                                 backupCodeCommand.put(playerName, 1);
                             }
@@ -612,7 +614,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         }
                     }
                 }
-                if(args[0].equals("code")) {
+                if (args[0].equals("code")) {
                     if (!signedInPlayers.containsKey(playerName)) {
                         MessageDigest md = null;
                         try {
@@ -649,8 +651,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                                 if (correct.equals("TRUE")) {
                                     player.sendMessage(backupCodeUse);
                                     canBackupPlayers.add(playerName);
-                                }
-                                else {
+                                } else {
                                     player.kickPlayer(backupCodeWrong);
                                 }
                             }
@@ -709,61 +710,16 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                                     }
                                     player.kickPlayer(passwordUpdated + codeDeleted);
                                 }
-                            }
-                            else {
+                            } else {
                                 player.sendMessage(shortPassword);
                             }
                         }
                     }
                 }
-                if(args[0].equals("email")) {
-                    String emailAddress = args[1];
-                    MessageDigest md = null;
-                    try {
-                        md = MessageDigest.getInstance("SHA-512");
-                    } catch (NoSuchAlgorithmException e) {
-                    }
-                    byte[] hash = md.digest(playerName.getBytes());
-                    StringBuilder sb = new StringBuilder();
-                    for (byte b : hash) {
-                        sb.append(String.format("%02x", b));
-                    }
-                    String username = sb.toString();
-                    String sqlCommand = "SELECT MAX(CASE WHEN uname = '" + username + "' AND email = '' THEN 'TRUE' ELSE 'FALSE' END) AS 'HAVEEMAIL' FROM playerdata;";
-                    try {
-                        Connection conn = this.connect();
-                        Statement stmt = conn.createStatement();
-                        ResultSet rs = stmt.executeQuery(sqlCommand);
-                        if (rs.next()) {
-                            String haveemail = rs.getString("HAVEEMAIL");
-                            conn.close();
-                            stmt.close();
-                            rs.close();
-                            if (haveemail.equals("TRUE")) {
-                                player.sendMessage(updateEmail);
-                            }
-                            else {
-
-                            }
-                        }
-                    } catch (SQLException e) {
-                    }
+                if (args[0].equals("email")) {
+                    player.sendMessage("Under development");
                 }
-            if(args[0].equals("newmail")) {
-                String emailAddress = args[1];
-                MessageDigest md = null;
-                try {
-                    md = MessageDigest.getInstance("SHA-512");
-                } catch (NoSuchAlgorithmException e) {
-                }
-                byte[] hash = md.digest(playerName.getBytes());
-                StringBuilder sb = new StringBuilder();
-                for (byte b : hash) {
-                    sb.append(String.format("%02x", b));
-                }
-                String username = sb.toString();
                 break;
-            }
             case "login":
                 if (!signedInPlayers.containsKey(playerName)) {
                     String passwd1 = args[0];
@@ -806,8 +762,7 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                                 player.removePotionEffect(SLOW_DIGGING.getType());
                                 player.setNoDamageTicks(200);
                                 player.addPotionEffect(DAMAGE_RESISTANCE);
-                            }
-                            else {
+                            } else {
                                 player.sendMessage(wrongPassword);
                             }
                             rs.close();
@@ -818,8 +773,15 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                     }
                 }
                 break;
+            case "setpass":
+                if (player.hasPermission("loginme.registerplayer")) {
+                    if (signedInPlayers.containsKey(playerName)) {
+
+                    }
+                }
+                break;
         }
-        if(command.getName().equals("register") || command.getName().equals("reg")) {
+        if (command.getName().equals("register") || command.getName().equals("reg")) {
             MessageDigest md = null;
             try {
                 md = MessageDigest.getInstance("SHA-512");
@@ -849,10 +811,9 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                                     if (weakPasswords.contains(passwd1) && dontAllowCommonPasswords) {
                                         player.sendMessage(weakPassword);
                                     }
-                                    if(passwd1.equals(playerName)) {
+                                    if (passwd1.equals(playerName)) {
                                         player.sendMessage(weakPassword);
-                                    }
-                                    else {
+                                    } else {
                                         md = null;
                                         try {
                                             md = MessageDigest.getInstance("SHA-512");
@@ -899,8 +860,99 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                         }
                     }
                 }
+            } catch (SQLException e) {
             }
-            catch (SQLException e) {
+        }
+        if (command.getName().equals("registerplayer") || command.getName().equals("regplayer")) {
+            if (player.hasPermission("loginme.registerplayer")) {
+                if (signedInPlayers.containsKey(playerName)) {
+                    Player playerRegister = null;
+                    MessageDigest md = null;
+                    try {
+                        md = MessageDigest.getInstance("SHA-512");
+                    } catch (NoSuchAlgorithmException e) {
+                    }
+                    byte[] hash = md.digest(args[0].getBytes());
+                    StringBuilder sb = new StringBuilder();
+                    for (byte b : hash) {
+                        sb.append(String.format("%02x", b));
+                    }
+                    String username = sb.toString();
+                    String sqlCommand = "SELECT CASE WHEN EXISTS ( SELECT * FROM `playerdata` WHERE uname ='" + username + "' ) THEN 'TRUE' ELSE 'FALSE' END AS 'EXISTS';";
+                    try {
+                        Connection conn = this.connect();
+                        Statement stmt = conn.createStatement();
+                        ResultSet rs = stmt.executeQuery(sqlCommand);
+                        if (rs.next()) {
+                            String exists = rs.getString("EXISTS");
+                            stmt.close();
+                            conn.close();
+                            if (exists.equals("FALSE")) {
+                                if (!signedInPlayers.containsKey(args[0])) {
+                                    String passwd1 = args[1];
+                                    if (passwd1.length() >= minPassLength) {
+                                        if (weakPasswords.contains(passwd1) && dontAllowCommonPasswords) {
+                                            player.sendMessage(weakPassword);
+                                        }
+                                        if (passwd1.equals(playerName)) {
+                                            player.sendMessage(weakPassword);
+                                        } else {
+                                            md = null;
+                                            try {
+                                                md = MessageDigest.getInstance("SHA-512");
+                                            } catch (NoSuchAlgorithmException e) {
+                                            }
+                                            hash = md.digest(passwd1.getBytes());
+                                            sb = new StringBuilder();
+                                            for (byte b : hash) {
+                                                sb.append(String.format("%02x", b));
+                                            }
+                                            String passwd = sb.toString();
+                                            sqlCommand = "INSERT INTO PLAYERDATA (uname, passwd) " +
+                                                    "VALUES ('" + username + "', '" + passwd + "')";
+                                            try {
+                                                conn = this.connect();
+                                                stmt = conn.createStatement();
+                                                stmt.execute(sqlCommand);
+                                                rs.close();
+                                                stmt.close();
+                                                conn.close();
+                                                player.sendMessage(registeredPlayer + args[0]);
+                                                try {
+                                                    playerRegister = Bukkit.getServer().getPlayer(args[0]);
+                                                    if (playerRegister.isOnline()) {
+                                                        String joinMessageNew = joinMessage.replace("[PLAYER]", args[0]);
+                                                        String registeredByMessageNew = registeredBy.replace("[NAME]", playerName).replace("[PASSWORD]", args[1]);
+                                                        Bukkit.broadcastMessage(joinMessageNew);
+                                                        playerRegister.sendMessage(registeredByMessageNew);
+                                                        playerRegister.setGameMode(GameMode.SURVIVAL);
+                                                        playerRegister.sendMessage(addEmail);
+                                                        playerRegister.sendTitle(loggedInTitle + args[0] + "!", loggedInSubTitle, 5, 70, 10);
+                                                        playerRegister.playSound(playerRegister.getLocation(), "block.note_block.pling", SoundCategory.MASTER, 1.0f, 1.0f);
+                                                        signedInPlayers.put(args[0], playerRegister.getAddress().getAddress().toString());
+                                                        playerRegister.removePotionEffect(SLOW.getType());
+                                                        playerRegister.removePotionEffect(BLINDNESS.getType());
+                                                        playerRegister.removePotionEffect(JUMP.getType());
+                                                        playerRegister.removePotionEffect(SLOW_DIGGING.getType());
+                                                        playerRegister.setNoDamageTicks(200);
+                                                        playerRegister.addPotionEffect(DAMAGE_RESISTANCE);
+                                                    } else {
+
+                                                    }
+                                                } catch (Exception e) {
+                                                }
+                                            } catch (SQLException e) {
+                                            }
+                                        }
+                                    } else {
+                                        player.sendMessage(shortPassword);
+                                    }
+                                }
+                            }
+                        }
+                    } catch (SQLException e) {
+                    }
+                }
             }
         }
         return true;
