@@ -91,7 +91,7 @@ public class Functions {
                 "§a*======================================*§r\n" +
                    "§e  --- Thanks for using OnePlugins! ---§r\n" +
                    "  >> Plugin name: §dLoginMe§r\n" +
-                   "              >>  Version: 1.0§r\n" +
+                   "              >>  Version: 1.1§r\n" +
                    "  §oBXn4§r\n" +
                    "§a*======================================*§r");
     }
