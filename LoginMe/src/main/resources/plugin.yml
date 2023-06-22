@@ -24,9 +24,11 @@ commands:
     description: Registering a player by an admin.
     usage: /registerplayer <player> <password>
       - regplayer
+    permission: loginme.registerplayer
   setpass:
     description: Change password of a player.
     usage: /setpass <player> <password>
+    permission: loginme.setpass
   loginbackup:
     description: Simple backup code, to reset your password.
     usage:
