@@ -1,5 +1,5 @@
 name: LoginMe
-version: '1.0'
+version: '1.1'
 main: bxn4.oneplugins.loginme.LoginMe
 api-version: 1.19
 description: A simple login plugin
