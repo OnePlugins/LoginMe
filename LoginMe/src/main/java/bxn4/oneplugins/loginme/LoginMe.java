@@ -808,48 +808,49 @@ public final class LoginMe extends JavaPlugin implements CommandExecutor, Listen
                             String passwd2 = args[1];
                             if (passwd1.length() >= minPassLength) {
                                 if (passwd1.equals(passwd2)) {
-                                    if (weakPasswords.contains(passwd1) && dontAllowCommonPasswords) {
-                                        player.sendMessage(weakPassword);
-                                    }
-                                    if (passwd1.equals(playerName)) {
-                                        player.sendMessage(weakPassword);
+                                    if (!passwd1.equals(playerName)) {
+                                        if (weakPasswords.contains(passwd1) && dontAllowCommonPasswords) {
+                                            player.sendMessage(weakPassword);
+                                        } else {
+                                            md = null;
+                                            try {
+                                                md = MessageDigest.getInstance("SHA-512");
+                                            } catch (NoSuchAlgorithmException e) {
+                                            }
+                                            hash = md.digest(passwd1.getBytes());
+                                            sb = new StringBuilder();
+                                            for (byte b : hash) {
+                                                sb.append(String.format("%02x", b));
+                                            }
+                                            String passwd = sb.toString();
+                                            sqlCommand = "INSERT INTO PLAYERDATA (uname, passwd) " +
+                                                    "VALUES ('" + username + "', '" + passwd + "')";
+                                            try {
+                                                conn = this.connect();
+                                                stmt = conn.createStatement();
+                                                stmt.execute(sqlCommand);
+                                                rs.close();
+                                                stmt.close();
+                                                conn.close();
+                                                String joinMessageNew = joinMessage.replace("[PLAYER]", playerName);
+                                                Bukkit.broadcastMessage(joinMessageNew);
+                                                player.sendMessage(registeredText);
+                                                player.setGameMode(GameMode.SURVIVAL);
+                                                player.sendMessage(addEmail);
+                                                player.sendTitle(loggedInTitle + playerName + "!", loggedInSubTitle, 5, 70, 10);
+                                                player.playSound(player.getLocation(), "block.note_block.pling", SoundCategory.MASTER, 1.0f, 1.0f);
+                                                signedInPlayers.put(playerName, player.getAddress().getAddress().toString());
+                                                player.removePotionEffect(SLOW.getType());
+                                                player.removePotionEffect(BLINDNESS.getType());
+                                                player.removePotionEffect(JUMP.getType());
+                                                player.removePotionEffect(SLOW_DIGGING.getType());
+                                                player.setNoDamageTicks(200);
+                                                player.addPotionEffect(DAMAGE_RESISTANCE);
+                                            } catch (SQLException e) {
+                                            }
+                                        }
                                     } else {
-                                        md = null;
-                                        try {
-                                            md = MessageDigest.getInstance("SHA-512");
-                                        } catch (NoSuchAlgorithmException e) {
-                                        }
-                                        hash = md.digest(passwd1.getBytes());
-                                        sb = new StringBuilder();
-                                        for (byte b : hash) {
-                                            sb.append(String.format("%02x", b));
-                                        }
-                                        String passwd = sb.toString();
-                                        sqlCommand = "INSERT INTO PLAYERDATA (uname, passwd) " +
-                                                "VALUES ('" + username + "', '" + passwd + "')";
-                                        try {
-                                            conn = this.connect();
-                                            stmt = conn.createStatement();
-                                            stmt.execute(sqlCommand);
-                                            rs.close();
-                                            stmt.close();
-                                            conn.close();
-                                            String joinMessageNew = joinMessage.replace("[PLAYER]", playerName);
-                                            Bukkit.broadcastMessage(joinMessageNew);
-                                            player.sendMessage(registeredText);
-                                            player.setGameMode(GameMode.SURVIVAL);
-                                            player.sendMessage(addEmail);
-                                            player.sendTitle(loggedInTitle + playerName + "!", loggedInSubTitle, 5, 70, 10);
-                                            player.playSound(player.getLocation(), "block.note_block.pling", SoundCategory.MASTER, 1.0f, 1.0f);
-                                            signedInPlayers.put(playerName, player.getAddress().getAddress().toString());
-                                            player.removePotionEffect(SLOW.getType());
-                                            player.removePotionEffect(BLINDNESS.getType());
-                                            player.removePotionEffect(JUMP.getType());
-                                            player.removePotionEffect(SLOW_DIGGING.getType());
-                                            player.setNoDamageTicks(200);
-                                            player.addPotionEffect(DAMAGE_RESISTANCE);
-                                        } catch (SQLException e) {
-                                        }
+                                        player.sendMessage(weakPassword);
                                     }
                                 } else {
                                     player.sendMessage(passwordsDoesNotMatch);
