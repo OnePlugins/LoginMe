@@ -59,7 +59,7 @@ Simple welcome message, when the player join.
 ## Download
 |           LoginMe           |
 |-----------------------------|
-| Version: 1.0 SPIGOT                |
+| Version: 1.1 SPIGOT                |
 | MC version: 1.19.4          |
 | Supported languages:  |
 | en, hu, lt |
